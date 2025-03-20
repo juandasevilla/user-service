@@ -3,12 +3,18 @@ package com.example.userservice.domain.model;
 import com.example.userservice.domain.exceptions.RoleNullOrSpaceException;
 
 public class RoleModel {
+    private Long id;
     private String name;
     private String description;
 
-    public RoleModel(String name, String description) {
+    public RoleModel(Long id, String name, String description) {
+        this.id = id;
         setName(name);
         setDescription(description);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
