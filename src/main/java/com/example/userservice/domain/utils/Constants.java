@@ -6,4 +6,5 @@ public class Constants {
     }
 
     public static final String SAVE_ROLE_RESPONSE_MESSAGE = "Role created successfully.";
+    public static final String SAVE_USER_RESPONSE_MESSAGE = "User created successfully.";
 }
