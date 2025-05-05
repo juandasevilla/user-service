@@ -1,17 +1,22 @@
 package com.example.userservice.commons.configuration.beans;
 
+import com.example.userservice.domain.ports.in.AuthServicePort;
 import com.example.userservice.domain.ports.in.RoleServicePort;
 import com.example.userservice.domain.ports.in.UserServicePort;
+import com.example.userservice.domain.ports.out.AuthPersistencePort;
 import com.example.userservice.domain.ports.out.RolePersistencePort;
 import com.example.userservice.domain.ports.out.UserPersistencePort;
+import com.example.userservice.domain.usecases.AuthUseCase;
 import com.example.userservice.domain.usecases.RoleUseCase;
 import com.example.userservice.domain.usecases.UserUseCase;
+import com.example.userservice.infrastructure.adapters.persistence.AuthPersistenceAdapter;
 import com.example.userservice.infrastructure.adapters.persistence.RolePersistenceAdapter;
 import com.example.userservice.infrastructure.adapters.persistence.UserPersistenceAdapter;
 import com.example.userservice.infrastructure.mappers.RoleEntityMapper;
 import com.example.userservice.infrastructure.mappers.UserEntityMapper;
 import com.example.userservice.infrastructure.repositories.mysql.RoleRepository;
 import com.example.userservice.infrastructure.repositories.mysql.UserRepository;
+import com.example.userservice.infrastructure.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +30,7 @@ public class BeanConfiguration {
     private final RoleEntityMapper roleEntityMapper;
     private final UserRepository  userRepository;
     private final UserEntityMapper userEntityMapper;
+    private final JwtProvider jwtProvider;
 
     public RolePersistencePort rolePersistencePort() {
         return new RolePersistenceAdapter(roleRepository, roleEntityMapper);
@@ -47,6 +53,15 @@ public class BeanConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    public AuthPersistencePort authPersistencePort() {
+        return new AuthPersistenceAdapter(userRepository, userEntityMapper, passwordEncoder(), jwtProvider);
+    }
+
+    @Bean
+    public AuthServicePort authServicePort() {
+        return new AuthUseCase(authPersistencePort());
     }
 
 }
