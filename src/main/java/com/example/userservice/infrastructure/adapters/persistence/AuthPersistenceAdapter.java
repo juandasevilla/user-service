@@ -32,8 +32,8 @@ public class AuthPersistenceAdapter implements AuthPersistencePort {
     }
 
     @Override
-    public String generateToken(String email, String role) {
-        return jwtProvider.generateToken(email, role);
+    public String generateToken(String email, String role, Long userId) {
+        return jwtProvider.generateToken(email, role, userId);
     }
 
 }

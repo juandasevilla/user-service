@@ -15,7 +15,7 @@ public class AuthUseCase implements AuthServicePort {
     @Override
     public LoginDomainResponse login(String email, String password) {
         UserModel user = authPersistencePort.authenticate(email, password);
-        String token = authPersistencePort.generateToken(user.getEmail(), user.getRole().getName());
+        String token = authPersistencePort.generateToken(user.getEmail(), user.getRole().getName(), user.getId());
         return new LoginDomainResponse(token, user.getRole().getName());
     }
 }

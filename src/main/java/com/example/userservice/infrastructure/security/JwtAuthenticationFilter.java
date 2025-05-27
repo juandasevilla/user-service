@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -38,12 +39,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtProvider.validateToken(jwt)) {
                 String email = jwtProvider.extractUsername(jwt);
                 String role = jwtProvider.extractRole(jwt);
+                Long userId = jwtProvider.extractUserId(jwt);
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         email,
                         null,
                         Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
                 );
+                authToken.setDetails(Map.of("userId", userId));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
